@@ -10,6 +10,7 @@ void asertar(int condicion, const char *mensaje) {
 }
 
 int mayorACero(int x) { return x > 0; }
+int mayorOIgualACero(int x) { return x >= 0; }
 
 int todos(int (*condicion)(int x), int xs[], int n) {
   int i;

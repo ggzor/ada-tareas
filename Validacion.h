@@ -4,6 +4,7 @@
 void asertar(int condicion, const char *mensaje);
 
 int mayorACero(int x);
+int mayorOIgualACero(int x);
 
 int todos(int (*condicion)(int x), int xs[], int n);
 int unicos(int xs[], int n);
