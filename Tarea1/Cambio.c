@@ -9,8 +9,10 @@ int darCambio(int cantidad, int denominaciones[], int resultados[], int n) {
 
   int i;
   for (i = n - 1; i >= 0; i--) {
-    resultados[i] = cantidad / denominaciones[i];
-    cantidad %= denominaciones[i];
+    while (cantidad >= denominaciones[i]) {
+      cantidad -= denominaciones[i];
+      resultados[i]++;
+    }
   }
 
   return cantidad;
