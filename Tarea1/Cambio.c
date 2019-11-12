@@ -8,7 +8,7 @@ int darCambio(int cantidad, int denominaciones[], int resultados[], int n) {
   ordenar(denominaciones, n);
 
   int i;
-  for (i = n - 1; i >= 0; i--) {
+  for (i = n - 1; i >= 0 && cantidad > 0; i--) {
     while (cantidad >= denominaciones[i]) {
       cantidad -= denominaciones[i];
       resultados[i]++;
