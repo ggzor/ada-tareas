@@ -1,3 +1,4 @@
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -10,14 +11,36 @@ typedef struct {
   int indice;
 } Objeto;
 
-int repartir(int pesoMax, Objeto objetos[], int n, float resultados[]) {
+int proporcionValorPeso(const void *o1, const void *o2) {
+  Objeto *objeto1 = *((Objeto **) o1),
+         *objeto2 = *((Objeto **) o2);
 
+  printf("%d %d, ", objeto1->indice, objeto1->peso);
+  printf("%d %d\n", objeto2->indice, objeto2->peso);
+
+  return (objeto2->valor * objeto1->peso - objeto1->valor * objeto2->peso);
+}
+
+int repartir(int pesoMax, Objeto **objetos, int n, int resultados[]) {
+  ordenarPor(proporcionValorPeso, objetos, n, sizeof(Objeto *));
+
+  int restante = pesoMax;
+
+  int i, tomado;
+  for (i = 0; i < n && restante > 0; i++) {
+    tomado = imin(restante, objetos[i]->peso);
+    
+    restante -= tomado;
+    resultados[i] = tomado;
+  }
+
+  return restante;
 }
 
 int main() {
   int pesoMax, n;
-  Objeto *objetos;
-  int *resultados;
+  Objeto *objetos, **apuntadoresObjetos;
+  int *pesoTomado;
 
   int i;
 
@@ -30,11 +53,12 @@ int main() {
 
   asertar(n > 0, "La cantidad de objetos tiene que ser mayor a cero.");
   objetos = malloc(sizeof(Objeto) * n);
-  resultados = malloc(sizeof(float) * n);
+  apuntadoresObjetos = malloc(sizeof(Objeto *) * n);
+  pesoTomado = malloc(sizeof(int) * n);
 
   printf("\nIntroduce el peso y valor de cada objeto: \n");
   for (i = 0; i < n; i++) {
-    objetos[i].indice = i;
+    objetos[i].indice = i + 1;
 
     scanf("%d%*c", &objetos[i].peso);
     asertar(objetos[i].peso > 0, "El peso de cada objeto debe ser mayor a cero.");
@@ -43,24 +67,43 @@ int main() {
     asertar(objetos[i].valor > 0, "El valor de cada objeto debe ser mayor a cero.");
   }
 
-  // Inicializar resultados en 0 e índices correspondientemente
-  for (i = 0; i < n; i++)
-    resultados[i] = 0;
+  // Inicializar resultados en 0 y apuntadores
+  for (i = 0; i < n; i++) {
+    pesoTomado[i] = 0;
+    apuntadoresObjetos[i] = objetos + i;
+  }
 
   printf("\nIntroduce el peso máximo que puede llevar la mochila: ");
   scanf("%d%*c", &pesoMax);
 
   asertar(pesoMax > 0, "El peso máximo debe ser mayor a 0.");
 
-  int resto = repartir(pesoMax, objetos, n, resultados);
+  int resto = repartir(pesoMax, apuntadoresObjetos, n, pesoTomado);
 
-  printf("La solución es tomar las siguientes fracciones de cada uno de los objetos: ");
+  // Imprimir resultados
+  printf("La solución es tomar las siguientes fracciones: \n");
   printf("Objeto    Fracción\n");
-  
+
   for (i = 0; i < n; i++) {
-    
+    if (pesoTomado[i] > 0) {
+      printf("  %2d  " "    ", apuntadoresObjetos[i]->indice);
+
+      if (pesoTomado[i] == apuntadoresObjetos[i]->peso) {
+        printf("   1    \n");
+      } else {
+        int g = gcd(pesoTomado[i], apuntadoresObjetos[i]->peso);
+        printf("%d/%d = %.3f\n", 
+          pesoTomado[i] / g, 
+          apuntadoresObjetos[i]->peso / g, 
+          (float) pesoTomado[i] / apuntadoresObjetos[i]->peso);
+      }
+    }
+  }
+
+  if (resto > 0) {
+    printf("\nQuedaron %d unidades de peso disponibles.\n", resto);
   }
 
   free(objetos);
-  free(resultados);
+  free(pesoTomado);
 }
