@@ -15,9 +15,6 @@ int proporcionValorPeso(const void *o1, const void *o2) {
   Objeto *objeto1 = *((Objeto **) o1),
          *objeto2 = *((Objeto **) o2);
 
-  printf("%d %d, ", objeto1->indice, objeto1->peso);
-  printf("%d %d\n", objeto2->indice, objeto2->peso);
-
   return (objeto2->valor * objeto1->peso - objeto1->valor * objeto2->peso);
 }
 
