@@ -32,3 +32,20 @@ int unicos(int xs[], int n) {
 
   return 1;
 }
+
+int potenciaDe2(int n) {
+  int unos = 0;
+  while (n > 0 && unos <= 1) {
+    if (n & 1)
+      unos++;
+    
+    n >>= 1; 
+  }
+  
+  return unos == 1;
+}
+
+int enRango(int l, int u, int n) {
+  return (l <= n) && (n <= u);
+}
+
