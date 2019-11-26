@@ -79,22 +79,30 @@ int main() {
 
   // Imprimir resultados
   printf("La solución es tomar las siguientes fracciones: \n");
-  printf("Objeto    Fracción\n");
-
+  printf("Objeto    Fracción         Valor\n");
+  float valorMaximo = 0, valorTomado;
   for (i = 0; i < n; i++) {
     if (pesoTomado[i] > 0) {
       printf("  %2d  " "    ", apuntadoresObjetos[i]->indice);
 
+      valorTomado = apuntadoresObjetos[i]->valor * ((float) pesoTomado[i] / apuntadoresObjetos[i]->peso);
+      valorMaximo += valorTomado;
+
       if (pesoTomado[i] == apuntadoresObjetos[i]->peso) {
-        printf("   1    \n");
+        printf("   1             ");
       } else {
         int g = gcd(pesoTomado[i], apuntadoresObjetos[i]->peso);
-        printf("%d/%d = %.3f\n", 
+        printf("%d/%d = %.3f      ", 
           pesoTomado[i] / g, 
           apuntadoresObjetos[i]->peso / g, 
           (float) pesoTomado[i] / apuntadoresObjetos[i]->peso);
       }
+      printf("%4.3f\n", valorTomado);
     }
+  }
+
+  if (valorMaximo > 0) {
+    printf("\nEl valor máximo que se puede obtener es %0.3f.\n", valorMaximo);
   }
 
   if (resto > 0) {
