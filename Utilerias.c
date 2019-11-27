@@ -60,6 +60,7 @@ void ordenarPor(int (*comparar)(const void *, const void *), void *a, int n, int
 }
 
 int imin(int a, int b) { return a < b ? a : b; }
+int imax(int a, int b) { return a < b ? b : a; }
 
 int gcd(int a, int b) {
   if (b == 0)
